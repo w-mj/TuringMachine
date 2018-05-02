@@ -17,10 +17,10 @@
    <widget class="QScrollArea" name="scroll">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>380</y>
-      <width>761</width>
-      <height>131</height>
+      <x>0</x>
+      <y>440</y>
+      <width>1141</width>
+      <height>141</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -31,29 +31,37 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>759</width>
-       <height>129</height>
+       <width>1139</width>
+       <height>139</height>
       </rect>
      </property>
-     <widget class="QWidget" name="horizontalLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>2</width>
-        <height>2</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="layout">
-       <property name="spacing">
-        <number>3</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-      </layout>
-     </widget>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="go_left">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>310</y>
+      <width>98</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>left</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="go_right">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>380</y>
+      <width>98</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>right</string>
+    </property>
    </widget>
   </widget>
  </widget>

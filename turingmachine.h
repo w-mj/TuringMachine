@@ -1,13 +1,15 @@
 #ifndef TURINGMACHINE_H
 #define TURINGMACHINE_H
 
+#include <QObject>
 #include <QHBoxLayout>
 #include <QSet>
 #include <QLinkedList>
 #include "block.h"
 
-class TuringMachine
+class TuringMachine: public QObject
 {
+    Q_OBJECT
 public:
     explicit TuringMachine(QSet<QString> &reader_states_set,
                   QSet<QString> &tape_sign_set,
@@ -27,11 +29,15 @@ private:
     QString B;
     QSet<QString> input_signs;
     QSet<QString> F;
-    QString q0;  // init state
+    QString q0;  // state
 
     QString state;
-    int reader_pos = -1;
+    QLinkedList<Block*>::iterator current_pos;
     QLinkedList<Block*> tape;
+
+public slots:
+    void goLeft();
+    void goRight();
 };
 
 #endif // TURINGMACHINE_H

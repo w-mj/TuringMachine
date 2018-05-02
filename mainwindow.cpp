@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->scroll->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     ui->scroll->setWidgetResizable(true);
-    // ui->layout->setSizeConstraint(QVBoxLayout::SetMinAndMaxSize);
     QSet<QString> states;
     QSet<QString> signs;
     QString B = "B";
@@ -21,16 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QString q0 = "q0";
     states << "q1" << "q0";
     signs << "A" << "B";
-    input_signs << "A" << "C";
+    input_signs << "A";
     F << "q1";
     TuringMachine* t = new TuringMachine(states, signs, B, input_signs, F, q0);
-    QHBoxLayout* l = t->init_tape("A B A B");
+    QHBoxLayout* l = t->init_tape("A B A B A");
     ui->scrollAreaWidgetContents->setLayout(l);
-//    QString* reader = new QString("#");
-//    for(int i = 0; i < 100; i++) {
-//        Block *b = new Block(nullptr, "A", reader);
-//        ui->layout->addWidget(b);
-//    }
+
+    connect(ui->go_left, &QPushButton::clicked, t, &TuringMachine::goLeft);
+    connect(ui->go_right, &QPushButton::clicked, t, &TuringMachine::goRight);
 }
 MainWindow::~MainWindow()
 {

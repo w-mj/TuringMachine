@@ -7,6 +7,7 @@ TuringMachine::TuringMachine(QSet<QString> &reader_states_set,
                              QSet<QString> &input_sign_set,
                              QSet<QString> &F,
                              QString q0):
+    QObject(nullptr),
     reader_states(reader_states_set), tape_signs(tape_sign_set), B(B),
     input_signs(input_sign_set), F(F), q0(q0)
 {
@@ -27,6 +28,7 @@ TuringMachine::TuringMachine(QSet<QString> &reader_states_set,
 
 QHBoxLayout *TuringMachine::init_tape(QString tape_s)
 {
+    layout->addStretch();
     QStringList tape_list = tape_s.split(' ');
     for (QStringList::iterator a = tape_list.begin(); a != tape_list.end(); a++ ) {
         if (tape_signs.find(*a) != tape_signs.end()) {
@@ -35,8 +37,10 @@ QHBoxLayout *TuringMachine::init_tape(QString tape_s)
             tape.insert(tape.end(), b);
         }
     }
+    current_pos = tape.begin();
     if (tape.begin() != tape.end())
         (*tape.begin())->select(true);
+    layout->addStretch();
     return layout;
 }
 
@@ -45,4 +49,22 @@ TuringMachine::~TuringMachine()
     delete layout;
     for (auto b: tape)
         delete b;
+}
+
+void TuringMachine::goLeft()
+{
+    if (current_pos != tape.begin()) {
+        (*current_pos)->select(false);
+        current_pos--;
+        (*current_pos)->select(true);
+    }
+}
+
+void TuringMachine::goRight()
+{
+    if ((current_pos + 1 )!= tape.end()) {
+        (*current_pos)->select(false);
+        current_pos++;
+        (*current_pos)->select(true);
+    }
 }
