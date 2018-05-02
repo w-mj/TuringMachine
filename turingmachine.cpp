@@ -57,6 +57,13 @@ void TuringMachine::goLeft()
         (*current_pos)->select(false);
         current_pos--;
         (*current_pos)->select(true);
+    } else {
+        (*current_pos)->select(false);
+        Block* new_blank = new Block(nullptr, B, &state);
+        tape.insert(tape.begin(), new_blank);
+        layout->insertWidget(1, new_blank);
+        current_pos = tape.begin();
+        (*current_pos)->select(true);
     }
 }
 
@@ -65,6 +72,17 @@ void TuringMachine::goRight()
     if ((current_pos + 1 )!= tape.end()) {
         (*current_pos)->select(false);
         current_pos++;
+        (*current_pos)->select(true);
+    } else {
+        (*current_pos)->select(false);
+        // delete current_pos;  // desperate iterator first.
+        Block* new_blank = new Block(nullptr, B, &state);
+        tape.insert(tape.end(), new_blank);
+        //layout->removeItem(layout->takeAt(layout->count() - 1));
+        //layout->addWidget(new_blank);
+        //layout->addStretch();
+        layout->insertWidget(layout->count() - 1, new_blank);
+        current_pos = tape.end() - 1;
         (*current_pos)->select(true);
     }
 }
