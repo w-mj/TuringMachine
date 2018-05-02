@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "turingmachine.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void updateScrollBar();
+
+    TuringMachine* turing_machine = nullptr;
 };
 
 #endif // MAINWINDOW_H

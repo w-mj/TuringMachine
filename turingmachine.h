@@ -19,6 +19,8 @@ public:
                   QString q0);
 
     QHBoxLayout* init_tape(QString tape_s);
+    int size();
+    int reader_position();
 
     ~TuringMachine();
 
@@ -33,6 +35,7 @@ private:
 
     QString state;
     QLinkedList<Block*>::iterator current_pos;
+    int current_pos_i = 0;
     QLinkedList<Block*> tape;
 
 public slots:

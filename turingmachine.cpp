@@ -1,5 +1,5 @@
 #include "turingmachine.h"
-
+#include <QDebug>
 
 TuringMachine::TuringMachine(QSet<QString> &reader_states_set,
                              QSet<QString> &tape_sign_set,
@@ -38,10 +38,22 @@ QHBoxLayout *TuringMachine::init_tape(QString tape_s)
         }
     }
     current_pos = tape.begin();
+    current_pos_i = 0;
     if (tape.begin() != tape.end())
         (*tape.begin())->select(true);
     layout->addStretch();
     return layout;
+}
+
+int TuringMachine::size()
+{
+    return tape.size();
+}
+
+int TuringMachine::reader_position()
+{
+    qDebug() << current_pos_i << '/' << size();
+    return current_pos_i;
 }
 
 TuringMachine::~TuringMachine()
@@ -57,6 +69,7 @@ void TuringMachine::goLeft()
         (*current_pos)->select(false);
         current_pos--;
         (*current_pos)->select(true);
+        current_pos_i--;
     } else {
         (*current_pos)->select(false);
         Block* new_blank = new Block(nullptr, B, &state);
@@ -75,14 +88,11 @@ void TuringMachine::goRight()
         (*current_pos)->select(true);
     } else {
         (*current_pos)->select(false);
-        // delete current_pos;  // desperate iterator first.
         Block* new_blank = new Block(nullptr, B, &state);
         tape.insert(tape.end(), new_blank);
-        //layout->removeItem(layout->takeAt(layout->count() - 1));
-        //layout->addWidget(new_blank);
-        //layout->addStretch();
         layout->insertWidget(layout->count() - 1, new_blank);
         current_pos = tape.end() - 1;
         (*current_pos)->select(true);
     }
+    current_pos_i++;
 }

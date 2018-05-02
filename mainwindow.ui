@@ -63,6 +63,19 @@
      <string>right</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="scroll_button">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>380</y>
+      <width>98</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>scroll</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
