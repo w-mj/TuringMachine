@@ -16,19 +16,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->scroll->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     ui->scroll->setWidgetResizable(true);
-    QSet<QString> states;
-    QSet<QString> signs;
-    QString B = "B";
-    QSet<QString> input_signs;
-    QSet<QString> F;
-    QString q0 = "q0";
-    states << "q1" << "q0";
-    signs << "A" << "B";
-    input_signs << "A";
-    F << "q1";
-    turing_machine = new TuringMachine(states, signs, B, input_signs, F, q0);
-    QHBoxLayout* l = turing_machine ->init_tape("A B A B A A A A A A A A A A A A A A");
-    ui->scrollAreaWidgetContents->setLayout(l);
+
+    ui->state_set_input->setText("q1 q0");
+    ui->sign_set_input->setText("A B");
+    ui->B_input->setText("B");
+    ui->input_set_input->setText("A");
+    ui->F_set_input->setText("q1");
+    ui->q0_input->setText("q0");
+
     connect(ui->go_left, &QPushButton::clicked, [&](){
         turing_machine->goLeft();
         this->updateScrollBar();
@@ -37,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent) :
         turing_machine->goRight();
         this->updateScrollBar();
     });
-
 }
 MainWindow::~MainWindow()
 {
@@ -54,4 +48,25 @@ void MainWindow::updateScrollBar()
     int maxx = bar->maximum();
     int v = !k?0:k * (maxx - minn) + minn;
     bar->setValue(v);
+}
+
+void MainWindow::on_init_button_clicked()
+{
+    QString state_str = ui->state_set_input->text();
+    QString sign_str = ui->sign_set_input->text();
+    QString B_str = ui->B_input->text();
+    QString input_str = ui->input_set_input->text();
+    QString F_str = ui->F_set_input->text();
+    QString q0_str = ui->q0_input->text();
+
+    QSet<QString> state_set = state_str.split(' ').toSet();
+    QSet<QString> sign_set = sign_str.split(' ').toSet();
+    QSet<QString> input_set = input_str.split(' ').toSet();
+    QSet<QString> F_set = F_str.split(' ').toSet();
+
+    if (turing_machine != nullptr)
+        delete turing_machine;
+    turing_machine = new TuringMachine(state_set, sign_set, B_str, input_set, F_set, q0_str);
+    QLayout* layout = turing_machine->init_tape(ui->tape_input->text());
+    ui->scrollAreaWidgetContents->setLayout(layout);
 }

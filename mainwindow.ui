@@ -37,44 +37,191 @@
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="go_left">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>310</y>
-      <width>98</width>
-      <height>30</height>
+      <x>660</x>
+      <y>0</y>
+      <width>481</width>
+      <height>401</height>
      </rect>
     </property>
-    <property name="text">
-     <string>left</string>
-    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Tab 1</string>
+     </attribute>
+     <widget class="QTextEdit" name="function_box">
+      <property name="geometry">
+       <rect>
+        <x>-7</x>
+        <y>9</y>
+        <width>281</width>
+        <height>201</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
    </widget>
-   <widget class="QPushButton" name="go_right">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>380</y>
-      <width>98</width>
-      <height>30</height>
+      <x>20</x>
+      <y>30</y>
+      <width>381</width>
+      <height>291</height>
      </rect>
     </property>
-    <property name="text">
-     <string>right</string>
-    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>有穷状态集K</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="q0_input"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>带符号集合Γ</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>输入字符集合Σ</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>初始状态q0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="input_set_input"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="state_set_input"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="sign_set_input"/>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="F_set_input"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>终止状态集合F</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>空白符B</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="B_input"/>
+     </item>
+    </layout>
    </widget>
-   <widget class="QPushButton" name="scroll_button">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>380</y>
-      <width>98</width>
-      <height>30</height>
+      <x>440</x>
+      <y>120</y>
+      <width>82</width>
+      <height>68</height>
      </rect>
     </property>
-    <property name="text">
-     <string>scroll</string>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="go_right">
+       <property name="text">
+        <string>right</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="go_left">
+       <property name="text">
+        <string>left</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>400</y>
+      <width>1101</width>
+      <height>34</height>
+     </rect>
     </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>纸带</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="tape_input"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="run_button">
+         <property name="text">
+          <string>run</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_button">
+         <property name="text">
+          <string>step</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="back_button">
+         <property name="text">
+          <string>back</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="init_button">
+         <property name="text">
+          <string>init</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
