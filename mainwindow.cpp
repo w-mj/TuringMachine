@@ -57,7 +57,6 @@ void MainWindow::connect_turing_machine()
     connect(ui->step_button, &QPushButton::clicked, turing_machine, &TuringMachine::step);
     connect(turing_machine, &TuringMachine::wrongTape, this, &MainWindow::wrongTape);
     connect(turing_machine, &TuringMachine::correctTape, this, &MainWindow::correctTape);
-    connect(ui->run_button, &QPushButton::clicked, turing_machine, &TuringMachine::run);
 }
 
 void MainWindow::disconnect_turing_machine()
@@ -67,7 +66,6 @@ void MainWindow::disconnect_turing_machine()
     disconnect(ui->step_button, &QPushButton::clicked, turing_machine, &TuringMachine::step);
     disconnect(turing_machine, &TuringMachine::wrongTape, this, &MainWindow::wrongTape);
     disconnect(turing_machine, &TuringMachine::correctTape, this, &MainWindow::correctTape);
-    disconnect(ui->run_button, &QPushButton::clicked, turing_machine, &TuringMachine::run);
 
 }
 
@@ -164,4 +162,16 @@ void MainWindow::wrongTape()
 void MainWindow::correctTape()
 {
     QMessageBox::information(this, "Congratulations", msgs[6]);
+}
+
+void MainWindow::on_run_button_clicked()
+{
+    if (!turing_machine)
+        return;
+    QString text = ui->run_button->text();
+    if (!text.compare("&run"))
+        ui->run_button->setText("&stop");
+    else
+        ui->run_button->setText("&run");
+    turing_machine->run();
 }

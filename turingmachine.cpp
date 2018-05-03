@@ -30,6 +30,8 @@ TuringMachine::TuringMachine(QSet<QString> &reader_states_set,
         QStringList l = f.split('=');
         function.insert(l[0], l[1]);
     }
+    timer = new QTimer(nullptr);
+    QObject::connect(timer, &QTimer::timeout, this, &TuringMachine::step);
 }
 
 QHBoxLayout *TuringMachine::init_tape(QString tape_s)
@@ -51,36 +53,34 @@ QHBoxLayout *TuringMachine::init_tape(QString tape_s)
     return layout;
 }
 
-void TuringMachine::__run(int step)
-{
-    while(step--) {
-        QString tape_content = (*current_pos)->getContent();
-        QString func_index = state + "," + tape_content;
-        if (! function.contains(func_index)) {
-            if (F.contains(state))
-                emit correctTape();
-            else
-                emit wrongTape();
-            break;
-        }
-        const QStringList& transform = function.find(func_index)->split(",");
-        (*current_pos)->setContent(transform[1]);
-        state = transform[0];
-        if(transform[2] == "R")
-            goRight();
-        else if (transform[2] == "L")
-            goLeft();
-    }
-}
-
 void TuringMachine::step()
 {
-    __run(1);
+    QString tape_content = (*current_pos)->getContent();
+    QString func_index = state + "," + tape_content;
+    if (! function.contains(func_index)) {
+        if (F.contains(state))
+            emit correctTape();
+        else
+            emit wrongTape();
+        if(timer->isActive())
+            timer->stop();
+        return;
+    }
+    const QStringList& transform = function.find(func_index)->split(",");
+    (*current_pos)->setContent(transform[1]);
+    state = transform[0];
+    if(transform[2] == "R")
+        goRight();
+    else if (transform[2] == "L")
+        goLeft();
 }
 
 void TuringMachine::run()
 {
-    __run(-1);
+    if (timer->isActive())
+        timer->stop();
+    else
+        timer->start(300);
 }
 
 int TuringMachine::size()

@@ -6,6 +6,7 @@
 #include <QSet>
 #include <QMap>
 #include <QLinkedList>
+#include <QTimer>
 #include "block.h"
 
 class TuringMachine: public QObject
@@ -47,7 +48,7 @@ private:
     QStringList maximumMatching(QString s);
     void __run(int step);
 
-
+    QTimer *timer;
 
 
 public slots:
