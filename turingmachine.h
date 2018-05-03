@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QHBoxLayout>
 #include <QSet>
+#include <QMap>
 #include <QLinkedList>
 #include "block.h"
 
@@ -16,9 +17,12 @@ public:
                   QString B,
                   QSet<QString> &input_sign_set,
                   QSet<QString> &F,
-                  QString q0);
+                  QString q0,
+                  QStringList functions);
 
     QHBoxLayout* init_tape(QString tape_s);
+
+
     int size();
     int reader_position();
 
@@ -38,9 +42,24 @@ private:
     int current_pos_i = 0;
     QLinkedList<Block*> tape;
 
+    QMap<QString, QString > function;
+
+    QStringList maximumMatching(QString s);
+    void __run(int step);
+
+
+
+
 public slots:
     void goLeft();
     void goRight();
+    void step();
+    void run();
+
+signals:
+    void wrongTape();
+    void correctTape();
+    void illegal(QString tip);
 };
 
 #endif // TURINGMACHINE_H

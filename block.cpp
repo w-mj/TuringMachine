@@ -2,7 +2,7 @@
 #include <QPainter>
 
 Block::Block(QWidget *parent, QString code_, QString* reader)
-    : QWidget(parent), reader(reader), code(code_)
+    : QWidget(parent), reader(reader), content(code_)
 {
     this->setFixedSize(50, 100);
 }
@@ -28,18 +28,9 @@ void Block::paintEvent(QPaintEvent *event) {
     QFont font = painter.font();
     font.setPixelSize(33);
     painter.setFont(font);
-    painter.drawText(15, 70, code);
+    painter.drawText(15, 70, content);
 }
 
-void Block::changeState(char code) {
-    this->code = code;
-    update();
-}
-
-void Block::setReaderState(QString *readerState)
-{
-    reader = readerState;
-}
 
 void Block::select(bool s)
 {
@@ -54,4 +45,13 @@ Block::~Block()
 {
 }
 
+QString Block::getContent() const
+{
+    return content;
+}
+
+void Block::setContent(const QString &value)
+{
+    content = value;
+}
 

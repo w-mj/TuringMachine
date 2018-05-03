@@ -14,17 +14,18 @@ public:
     Block& operator =(Block& another) = default;
 
     void paintEvent(QPaintEvent *event);
-    void changeState(char code);
-    void setReaderState(QString* readerState);
 
     void select(bool s);
 
-
     ~Block();
+
+
+    QString getContent() const;
+    void setContent(const QString &value);
 
 private:
     QString *reader;
-    QString code;
+    QString content;
 
     bool selected = false;
 };

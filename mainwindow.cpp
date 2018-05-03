@@ -6,8 +6,22 @@
 #include <QScrollBar>
 #include <QSet>
 #include <QDebug>
-#include <QThread>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QMessageBox>
+#include <QFileDialog>
 
+QString parseJsonStringList(const QJsonObject& json, const QString& name, char join = '\0') {
+    QJsonArray a = json[name].toArray();
+    QStringList result;
+    for (QJsonValue v: a) {
+        result.append(v.toString());
+    }
+    return result.join(join);
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,22 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->scroll->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     ui->scroll->setWidgetResizable(true);
-
-    ui->state_set_input->setText("q1 q0");
-    ui->sign_set_input->setText("A B");
-    ui->B_input->setText("B");
-    ui->input_set_input->setText("A");
-    ui->F_set_input->setText("q1");
-    ui->q0_input->setText("q0");
-
-    connect(ui->go_left, &QPushButton::clicked, [&](){
-        turing_machine->goLeft();
-        this->updateScrollBar();
-    });
-    connect(ui->go_right, &QPushButton::clicked, [&](){
-        turing_machine->goRight();
-        this->updateScrollBar();
-    });
+    //connect(ui->go_left, &QPushButton::clicked, this, &MainWindow::updateScrollBar);
+    //connect(ui->go_right, &QPushButton::clicked, this, &MainWindow::updateScrollBar);
 }
 MainWindow::~MainWindow()
 {
@@ -50,6 +50,27 @@ void MainWindow::updateScrollBar()
     bar->setValue(v);
 }
 
+void MainWindow::connect_turing_machine()
+{
+    //connect(ui->go_left, &QPushButton::clicked, turing_machine, &TuringMachine::goLeft);
+    //connect(ui->go_right, &QPushButton::clicked, turing_machine, &TuringMachine::goRight);
+    connect(ui->step_button, &QPushButton::clicked, turing_machine, &TuringMachine::step);
+    connect(turing_machine, &TuringMachine::wrongTape, this, &MainWindow::wrongTape);
+    connect(turing_machine, &TuringMachine::correctTape, this, &MainWindow::correctTape);
+    connect(ui->run_button, &QPushButton::clicked, turing_machine, &TuringMachine::run);
+}
+
+void MainWindow::disconnect_turing_machine()
+{
+    //disconnect(ui->go_left, &QPushButton::clicked, turing_machine, &TuringMachine::goLeft);
+    //disconnect(ui->go_right, &QPushButton::clicked, turing_machine, &TuringMachine::goRight);
+    disconnect(ui->step_button, &QPushButton::clicked, turing_machine, &TuringMachine::step);
+    disconnect(turing_machine, &TuringMachine::wrongTape, this, &MainWindow::wrongTape);
+    disconnect(turing_machine, &TuringMachine::correctTape, this, &MainWindow::correctTape);
+    disconnect(ui->run_button, &QPushButton::clicked, turing_machine, &TuringMachine::run);
+
+}
+
 void MainWindow::on_init_button_clicked()
 {
     QString state_str = ui->state_set_input->text();
@@ -58,15 +79,89 @@ void MainWindow::on_init_button_clicked()
     QString input_str = ui->input_set_input->text();
     QString F_str = ui->F_set_input->text();
     QString q0_str = ui->q0_input->text();
+    QString function_str = ui->function_box->toPlainText();
 
-    QSet<QString> state_set = state_str.split(' ').toSet();
-    QSet<QString> sign_set = sign_str.split(' ').toSet();
-    QSet<QString> input_set = input_str.split(' ').toSet();
-    QSet<QString> F_set = F_str.split(' ').toSet();
+    QSet<QString> state_set = state_str.split(',').toSet();
+    QSet<QString> sign_set = sign_str.split(',').toSet();
+    QSet<QString> input_set = input_str.split(',').toSet();
+    QSet<QString> F_set = F_str.split(',').toSet();
+    QStringList function_set = function_str.split('\n');
 
     if (turing_machine != nullptr)
         delete turing_machine;
-    turing_machine = new TuringMachine(state_set, sign_set, B_str, input_set, F_set, q0_str);
-    QLayout* layout = turing_machine->init_tape(ui->tape_input->text());
-    ui->scrollAreaWidgetContents->setLayout(layout);
+    try {
+        turing_machine = new TuringMachine(state_set, sign_set, B_str, input_set, F_set, q0_str, function_set);
+        connect_turing_machine();
+        QLayout* layout = turing_machine->init_tape(ui->tape_input->text());
+        ui->scrollAreaWidgetContents->setLayout(layout);
+    } catch (int code) {
+        QMessageBox::critical(this, "ERROR", msgs[code]);
+        turing_machine = nullptr;
+        disconnect_turing_machine();
+    }
+
+}
+
+void MainWindow::on_import_button_clicked()
+{
+    QString path = QFileDialog::getOpenFileName(this);
+    qDebug() << path;
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        qDebug() << "fail to open file";
+    QByteArray data = file.readAll();
+    file.close();
+
+    QJsonObject json = QJsonDocument::fromJson(data).object();
+    ui->state_set_input->setText(parseJsonStringList(json, "K", ','));
+    ui->sign_set_input->setText(parseJsonStringList(json, "Gamma", ','));
+    ui->B_input->setText(json["B"].toString());
+    ui->input_set_input->setText(parseJsonStringList(json, "Sigma", ','));
+    ui->F_set_input->setText(parseJsonStringList(json, "F", ','));
+    ui->q0_input->setText(json["q0"].toString());
+    ui->function_box->setText(parseJsonStringList(json, "function", '\n'));
+    ui->tape_input->setText(json["test_tape"].toString());
+}
+
+void MainWindow::on_save_button_clicked()
+{
+    QString state_str = ui->state_set_input->text();
+    QString sign_str = ui->sign_set_input->text();
+    QString B_str = ui->B_input->text();
+    QString input_str = ui->input_set_input->text();
+    QString F_str = ui->F_set_input->text();
+    QString q0_str = ui->q0_input->text();
+    QString function_str = ui->function_box->toPlainText();
+
+    QJsonObject obj;
+    QJsonArray state = QJsonArray::fromStringList(state_str.split(','));
+    QJsonArray sign = QJsonArray::fromStringList(sign_str.split(','));
+    QJsonArray input = QJsonArray::fromStringList(input_str.split(','));
+    QJsonArray F = QJsonArray::fromStringList(F_str.split(','));
+    QJsonArray function = QJsonArray::fromStringList(function_str.split('\n'));
+    obj.insert("K", state);
+    obj.insert("Gamma", sign);
+    obj.insert("B", B_str);
+    obj.insert("Sigma", input);
+    obj.insert("F", F);
+    obj.insert("q0", q0_str);
+    obj.insert("function", function);
+    obj.insert("test_tape", ui->tape_input->text());
+
+    QString name = QFileDialog::getSaveFileName(this);
+    QFile file(name);
+    if (!file.open(QIODevice::WriteOnly| QIODevice::Text))
+        QMessageBox::critical(this, "Fail", msgs[7]);
+    else
+        file.write(QJsonDocument(obj).toJson(QJsonDocument::Indented));
+}
+
+void MainWindow::wrongTape()
+{
+    QMessageBox::warning(this, "Wrong", msgs[5]);
+}
+
+void MainWindow::correctTape()
+{
+    QMessageBox::information(this, "Congratulations", msgs[6]);
 }

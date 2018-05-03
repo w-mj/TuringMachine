@@ -46,24 +46,27 @@
       <height>401</height>
      </rect>
     </property>
-    <widget class="QWidget" name="tab">
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="Function">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>Function</string>
      </attribute>
      <widget class="QTextEdit" name="function_box">
       <property name="geometry">
        <rect>
         <x>-7</x>
-        <y>9</y>
-        <width>281</width>
-        <height>201</height>
+        <y>-1</y>
+        <width>481</width>
+        <height>371</height>
        </rect>
       </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>Usage</string>
      </attribute>
     </widget>
    </widget>
@@ -114,9 +117,6 @@
      <item row="0" column="1">
       <widget class="QLineEdit" name="state_set_input"/>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="sign_set_input"/>
-     </item>
      <item row="4" column="1">
       <widget class="QLineEdit" name="F_set_input"/>
      </item>
@@ -137,31 +137,8 @@
      <item row="2" column="1">
       <widget class="QLineEdit" name="B_input"/>
      </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>120</y>
-      <width>82</width>
-      <height>68</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="go_right">
-       <property name="text">
-        <string>right</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="go_left">
-       <property name="text">
-        <string>left</string>
-       </property>
-      </widget>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="sign_set_input"/>
      </item>
     </layout>
    </widget>
@@ -206,16 +183,23 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="back_button">
+        <widget class="QPushButton" name="init_button">
          <property name="text">
-          <string>back</string>
+          <string>init</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="init_button">
+        <widget class="QPushButton" name="import_button">
          <property name="text">
-          <string>init</string>
+          <string>import</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="save_button">
+         <property name="text">
+          <string>save</string>
          </property>
         </widget>
        </item>
